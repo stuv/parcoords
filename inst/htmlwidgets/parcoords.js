@@ -36,9 +36,19 @@ HTMLWidgets.widget({
       parcoords.hideAxis(["names"]);
     }
 
+    // set up crosstalk group/channel
+    //  if not provided then use the defaultGroup
+    if(crosstalk){
+      if(x.crosstalk_group) {
+        var grp = crosstalk.group(x.crosstalk_group);
+      } else {
+        var grp = crosstalk.defaultGroup;
+      }
+    }
+
     //identify the brushed elements and return those data IDs to Rshiny
     //the parcoords.on("brush",function(d)){} only works with 1D-axes selection
-    if (HTMLWidgets.shinyMode){
+    if (HTMLWidgets.shinyMode || crosstalk){
       parcoords.on("render", function() {
         var ids = [];
         if(this.brushed()){
@@ -47,9 +57,15 @@ HTMLWidgets.widget({
           })
         }
 
+        // once crosstalk completed should be able to remove this Shiny part
         //return the brushed row names
-        if(Shiny.onInputChange){
+        if(HTMLWidgets.shinyMode && Shiny.onInputChange){
           Shiny.onInputChange(el.id + "_brushed_row_names", ids);
+        }
+
+        //if crosstalk send brushed to selection
+        if(grp){
+          grp.var("selection").set(ids, {sender: el});
         }
       });
     }

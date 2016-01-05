@@ -18,6 +18,7 @@ Depends:
 License: MIT + file LICENSE
 LazyData: true
 Imports:
+    crosstalk,
     htmlwidgets (>= 0.3.2)
 Suggests:
     knitr,

@@ -119,6 +119,7 @@ parcoords <- function(
   , tasks = NULL
   , width = NULL
   , height = NULL
+  , crosstalk_group = NULL
 ) {
 
   # verify that data is a data.frame
@@ -199,6 +200,7 @@ parcoords <- function(
       , height = height
     )
     , tasks = tasks
+    , crosstalk_group = crosstalk_group
   )
 
   # remove NULL options
@@ -210,7 +212,8 @@ parcoords <- function(
     x,
     width = width,
     height = height,
-    package = 'parcoords'
+    package = 'parcoords',
+    dependencies = crosstalk::dependencies
   )
 }
 
