@@ -213,7 +213,7 @@ parcoords <- function(
     width = width,
     height = height,
     package = 'parcoords',
-    dependencies = crosstalk::dependencies
+    dependencies = crosstalk::dependencies()
   )
 }
 
