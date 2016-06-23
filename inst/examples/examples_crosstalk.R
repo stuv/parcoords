@@ -35,11 +35,12 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session){
-  output$parcoords1 <- renderParcoords({
-    parcoords(mtcars, brushMode = "1d-mult", brushPredicate = "OR", crosstalk_group = "A")
-  })
 
-  sd <- crosstalk::SharedData$new(mtcars %>% add_rownames(), "rowname", group = "A")
+  sd <- crosstalk::SharedData$new(mtcars, group = "A")
+
+  output$parcoords1 <- renderParcoords({
+    parcoords(sd, brushMode = "1d-mult", brushPredicate = "OR")
+  })
 
   output$plot1 <- renderPlot({
     df <- sd$data(TRUE)
