@@ -9,11 +9,13 @@
 
 library(parcoords)
 library(d3scatter)
-library(htmltools)
+library(crosstalk)
+
+sd <- SharedData$new(mtcars)
 
 browsable(tagList(
-  d3scatter(mtcars, ~wt, ~mpg, ~cyl, group = "A", height = 200, width = 400),
-  parcoords(mtcars, brushMode = "1d", crosstalk_group = "A", height = 300, width = 500)
+  d3scatter(sd, ~wt, ~mpg, ~cyl, height = 200, width = 400),
+  parcoords(mtcars, brushMode = "1d", height = 300, width = 500)
 ))
 
 

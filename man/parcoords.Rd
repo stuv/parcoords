@@ -8,7 +8,7 @@ parcoords(data, rownames = T, color = NULL, brushMode = NULL,
   brushPredicate = "and", reorderable = F, axisDots = NULL,
   margin = NULL, composite = NULL, alpha = NULL, queue = F, mode = F,
   rate = NULL, tasks = NULL, autoresize = FALSE, width = NULL,
-  height = NULL, crosstalk_group = NULL)
+  height = NULL)
 }
 \arguments{
 \item{data}{data.frame with data to use in the chart}
