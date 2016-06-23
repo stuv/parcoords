@@ -12,55 +12,75 @@ HTMLWidgets.widget({
 
       var x = instance.x;
 
+      // basic check of data to make sure we received
+      //   in column format or object of arrays
+      //   which is the default behavior of htmlwidgets
+      //   reason for this check is
+      //      future-proofing if behavior changes
+      //      someone supplies data in an atypical way
+      if( x.data.constructor.name === "Object" ){
+        // use HTMLWidgets function to convert to an array of objects (row format)
+  /*
+        //  with experimental dimensions
+        //  bug with hideAxis so remove rownames from data
+        if( typeof x.options.rownames == "undefined" ||
+            x.options.rownames === false
+        ) {
+          var tempdata = {};
+          Object.keys(x.data)
+                .filter(function(ky) {return ky!=="names"} )
+                .map(function(ky){
+                  tempdata[ky] = x.data[ky];
+                })
+          x.data = tempdata;
+        }
+  */
+        x.data = HTMLWidgets.dataframeToD3( x.data )
+      }
 
-      //ugly but currently have to clear out
-      //  each time to get proper render
       // delete all children of el
       //  possibly revisit to see if we should be a little more delicate
       d3.select( el ).selectAll("*").remove();
+
       // create our parallel coordinates
       var parcoords = d3.parcoords()("#" + el.id)
         .data( x.data );
 
-      if( typeof x.options.rownames == "undefined" || x.options.rownames === false ) {
-        //rownames = F so hide the axis
-        parcoords.hideAxis(["names"]);
+
+      // set up crosstalk group/channel
+      //  if not provided then use the defaultGroup
+      var grp;
+      if(crosstalk){
+        if(x.crosstalk_group) {
+          grp = crosstalk.group(x.crosstalk_group);
+        } else {
+          grp = crosstalk.defaultGroup;
+        }
       }
 
-    // set up crosstalk group/channel
-    //  if not provided then use the defaultGroup
-    var grp;
-    if(crosstalk){
-      if(x.crosstalk_group) {
-        grp = crosstalk.group(x.crosstalk_group);
-      } else {
-        grp = crosstalk.defaultGroup;
+      //identify the brushed elements and return those data IDs to Rshiny
+      //the parcoords.on("brush",function(d)){} only works with 1D-axes selection
+      if (HTMLWidgets.shinyMode || crosstalk){
+        parcoords.on("render", function() {
+          var ids = [];
+          if(this.brushed()){
+            ids = this.brushed().map(function(d){
+              return d.names;
+            });
+          }
+
+          // once crosstalk completed should be able to remove this Shiny part
+          //return the brushed row names
+          if(HTMLWidgets.shinyMode && Shiny.onInputChange){
+            Shiny.onInputChange(el.id + "_brushed_row_names", ids);
+          }
+
+          //if crosstalk send brushed to selection
+          if(grp){
+            grp.var("selection").set(ids, {sender: el});
+          }
+        });
       }
-    }
-
-    //identify the brushed elements and return those data IDs to Rshiny
-    //the parcoords.on("brush",function(d)){} only works with 1D-axes selection
-    if (HTMLWidgets.shinyMode || crosstalk){
-      parcoords.on("render", function() {
-        var ids = [];
-        if(this.brushed()){
-          ids = this.brushed().map(function(d){
-            return d.names;
-          });
-        }
-
-        // once crosstalk completed should be able to remove this Shiny part
-        //return the brushed row names
-        if(HTMLWidgets.shinyMode && Shiny.onInputChange){
-          Shiny.onInputChange(el.id + "_brushed_row_names", ids);
-        }
-
-        //if crosstalk send brushed to selection
-        if(grp){
-          grp.var("selection").set(ids, {sender: el});
-        }
-      });
-    }
 
       // customize our parcoords according to options
       Object.keys( x.options ).filter(function(k){ return k !== "reorderable" && k !== "brushMode" && k !== "brushPredicate" && k!== "color" && k!=="rownames" }).map( function(k) {
@@ -70,7 +90,7 @@ HTMLWidgets.widget({
             try {
               parcoords[k]();
             } catch(e) {
-              console.log( "key/option: " + k + " did not work so ignore for now." );
+              console.log( "key/option: " + k + " did not work so ignore for now." )
             }
           } else {
             try{
@@ -83,6 +103,17 @@ HTMLWidgets.widget({
           console.log( "key/option: " + k + " is not available for customization." )
         }
       })
+
+
+      // at one point thought I should
+      //   remove this because of bug with experimental dimensions
+      //    and handle for now by removing rownames from the data
+      // but instead I just had to move this piece to here
+      if( typeof x.options.rownames == "undefined" || x.options.rownames === false ) {
+        //rownames = F so hide the axis
+        parcoords.hideAxis(["names"]);
+      }
+
 
       // color option will require some custom handling
       //   if color is an object with colorScale and colorBy
@@ -146,7 +177,7 @@ HTMLWidgets.widget({
         }
         x.tasks.map(function(t){
           // for each tasks call the task with el supplied as `this`
-          t.call({el:el,parcoords:parcoords});
+          t.call({el:el,parcoords:parcoords,x:x});
         });
       }
 
@@ -201,8 +232,9 @@ HTMLWidgets.widget({
 
         }
 
-      }
+      },
 
+      instance: instance
     };
   }
 });
