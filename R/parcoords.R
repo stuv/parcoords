@@ -127,9 +127,6 @@ parcoords <- function(
   , height = NULL
 ) {
 
-  # verify that data is a data.frame
-  if(!is.data.frame(data)) stop( "data parameter should be of type data.frame", call. = FALSE)
-
   # copied code from d3scatter for working with crosstalk
   if (is.SharedData(data)) {
     key <- data$key()
@@ -139,6 +136,10 @@ parcoords <- function(
     key <- NULL
     crosstalk_group <- NULL
   }
+
+  # verify that data is a data.frame
+  if(!is.data.frame(data)) stop( "data parameter should be of type data.frame", call. = FALSE)
+
 
   # add rownames to data
   #  rownames = F will tell us to hide these with JavaScript

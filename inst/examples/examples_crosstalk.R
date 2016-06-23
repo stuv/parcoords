@@ -15,7 +15,7 @@ sd <- SharedData$new(mtcars)
 
 browsable(tagList(
   d3scatter(sd, ~wt, ~mpg, ~cyl, height = 200, width = 400),
-  parcoords(mtcars, brushMode = "1d", height = 300, width = 500)
+  parcoords(sd, brushMode = "1d", height = 300, width = 500)
 ))
 
 
