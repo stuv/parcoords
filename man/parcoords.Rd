@@ -7,8 +7,8 @@
 parcoords(data, rownames = T, color = NULL, brushMode = NULL,
   brushPredicate = "and", reorderable = F, axisDots = NULL,
   margin = NULL, composite = NULL, alpha = NULL, queue = F, mode = F,
-  rate = NULL, tasks = NULL, width = NULL, height = NULL,
-  crosstalk_group = NULL)
+  rate = NULL, tasks = NULL, autoresize = FALSE, width = NULL,
+  height = NULL, crosstalk_group = NULL)
 }
 \arguments{
 \item{data}{data.frame with data to use in the chart}
@@ -62,6 +62,12 @@ JavaScript \code{call} mechanism, so within the function, \code{this} will
 be an object with {this.el} representing the containing element of the
 \code{parcoords} and {this.parcoords} representing the \code{parcoords}
 instance.}
+
+\item{autoresize}{logical (default FALSE) to auto resize the parcoords
+when the size of the container changes.  This is useful
+in contexts such as rmarkdown slide presentations or
+flexdashboard.  However, this will not be useful if you
+expect bigger data or a more typical html context.}
 
 \item{width}{integer in pixels defining the width of the widget.  Autosizing  to 100%
 of the widget container will occur if \code{ width = NULL }.}

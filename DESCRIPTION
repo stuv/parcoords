@@ -1,6 +1,7 @@
 Package: parcoords
 Title: htmlwidget for d3.js parallel coordinates chart
-Version: 0.2.1
+Date: 2016-06-23
+Version: 0.4.0
 Authors@R: c( person("Mike", "Bostock", role = c("aut", "cph"), comment =
     "d3.js library in htmlwidgets/lib, http://d3js.org"), person("Kai", "Chang"
     ,role = c( "aut","cph" ), comment = "parallel coordinates reusable chart,
@@ -19,9 +20,9 @@ License: MIT + file LICENSE
 LazyData: true
 Imports:
     crosstalk,
-    htmlwidgets (>= 0.3.2)
+    htmlwidgets (> 0.6.0)
 Suggests:
     knitr,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 4.1.1.9001
+RoxygenNote: 5.0.1
