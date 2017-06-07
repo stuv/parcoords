@@ -18,7 +18,9 @@ Depends:
 License: MIT + file LICENSE
 LazyData: true
 Imports:
-    htmlwidgets (>= 0.6.0)
+    htmlwidgets (>= 0.6.0),
+    crosstalk,
+    htmltools
 Suggests:
     knitr,
     testthat
