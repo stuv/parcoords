@@ -175,7 +175,7 @@ parcoords <- function(
 
   # upper case brushPredicate
   brushPredicate = toupper( brushPredicate )
-  if(length(brushPredicate)) {print(brushPredicate)}
+  #if(length(brushPredicate)) {print(brushPredicate)}
   # make margin an option, so will need to modifyList
   if( !is.null(margin) && !is.list(margin) ){
     warning("margin should be a list like margin = list(top=20); assuming margin should be applied for all sides")
@@ -245,7 +245,7 @@ parcoords <- function(
 #' @example man-roxygen/shiny.R
 #'
 #' @export
-parcoordsOutput <- function(outputId, width = '100%', height = '400px', brush = NULL){
+parcoordsOutput <- function(outputId, width = '100%', height = '400px'){
   shinyWidgetOutput(outputId, 'parcoords', width, height, package = 'parcoords')
 }
 
