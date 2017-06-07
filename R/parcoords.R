@@ -175,7 +175,7 @@ parcoords <- function(
 
   # upper case brushPredicate
   brushPredicate = toupper( brushPredicate )
-  print(brushPredicate)
+  if(length(brushPredicate)) {print(brushPredicate)}
   # make margin an option, so will need to modifyList
   if( !is.null(margin) && !is.list(margin) ){
     warning("margin should be a list like margin = list(top=20); assuming margin should be applied for all sides")
