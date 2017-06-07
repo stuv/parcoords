@@ -246,7 +246,7 @@ parcoords <- function(
 #'
 #' @export
 parcoordsOutput <- function(outputId, width = '100%', height = '400px', brush = NULL){
-  shinyWidgetOutput(outputId, 'parcoords', width, height, package = 'parcoords', brush)
+  shinyWidgetOutput(outputId, 'parcoords', width, height, package = 'parcoords')
 }
 
 #' Widget render function for use in Shiny
