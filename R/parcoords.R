@@ -134,9 +134,17 @@ parcoords <- function(
   , elementId = NULL
 ) {
 
-  # verify that data is a data.frame
-  if(!is.data.frame(data)) stop( "data parameter should be of type data.frame", call. = FALSE)
-
+  if (is.SharedData(data)) {
+    # Using Crosstalk
+    key <- data$key()
+    group <- data$groupName()
+    data <- data$origData()
+  } else {
+    # Not using Crosstalk
+    key <- NULL
+    group <- NULL
+  }
+  
   # add rownames to data
   #  rownames = F will tell us to hide these with JavaScript
   data = data.frame(
